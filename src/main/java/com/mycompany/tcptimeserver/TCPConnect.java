@@ -47,46 +47,46 @@ public class TCPConnect {
             String returnMsg = "";
             while (!msg.equals("stop")) {
                 msg = scn.readLine();
-                
+
                 if (msg.equals("get time")) {
-                    outToClient.writeBytes(new java.util.Date().toString() + '\n');
-                } else if (msg.substring(0,6).equals("UPPER#")){
-                    
+                    outToClient.writeBytes(new java.util.Date().toString() + '\r' + '\n');
+                } else if (msg.length() >= 6 && msg.substring(0, 6).equals("UPPER#")) {
+
                     returnMsg = msg.substring(6);
-                    
+
                     outToClient.writeBytes(returnMsg.toUpperCase() + '\r' + '\n');
-                } else if (msg.substring(0,6).equals("LOWER#")){
+                } else if (msg.length() >= 6 && msg.substring(0, 6).equals("LOWER#")) {
                     returnMsg = msg.substring(6);
-                    
+
                     outToClient.writeBytes(returnMsg.toLowerCase() + '\r' + '\n');
-                } else if (msg.substring(0,8).equals("REVERSE#")){
+                } else if (msg.length() >= 8 && msg.substring(0, 8).equals("REVERSE#")) {
                     StringBuilder sb = new StringBuilder(msg.substring(8));
-                    
-                    
-                    
-                    
+
                     sb.reverse();
                     System.out.println(sb.toString());
-                    String letter1 = sb.substring(0,1);
+                    String letter1 = sb.substring(0, 1);
                     System.out.println(sb.toString());
                     returnMsg = sb.substring(1);
-                    
+
                     outToClient.writeBytes(letter1.toUpperCase() + returnMsg + '\r' + '\n');
-                    
-                } else if (msg.substring(0,10).equals("TRANSLATE#")){
+
+                } else if (msg.length() >= 10 && msg.substring(0, 10).equals("TRANSLATE#")) {
                     returnMsg = msg.substring(10);
-                    
+
                     System.out.println(returnMsg);
-                    
+
                     returnMsg = translate(returnMsg);
                     outToClient.writeBytes(returnMsg + '\r' + '\n');
-                    
-                    
                 } else {
-                    outToClient.writeBytes("command not recognised" + '\n' + '\r');
+                    returnMsg = "command not recognised! Closing connection";
+                    outToClient.writeBytes(returnMsg);
+                    break;
+                    
+                    
                 }
 
             }
+
             scn.close();
             outToClient.close();
             s.close();

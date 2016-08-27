@@ -24,17 +24,13 @@ public class TCPClient {
             while (!msg.equals("stop")) {
 
                 msg = inFromUser.readLine();
-                outToServer.writeBytes(msg + '\n');
+                outToServer.writeBytes(msg + '\r' + '\n');
                 System.out.println(inFromServer.readLine());
-                
-
             }
             
-            
-            
-
         } catch (Exception e) {
-            System.out.print("Whoops! It didn't work!\n");
+            e.printStackTrace();
+            System.out.println("Something went wrong: " + e.getMessage());
         }
     }
 
